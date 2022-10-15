@@ -18,77 +18,27 @@ if (close) {
     nav.classList.remove("active");
   });
 }
-var slideIndex = 1;
 
-var myTimer;
+let day = document.querySelector(".days");
+let hour = document.querySelector(".hours");
+let minute = document.querySelector(".minutes");
+let second = document.querySelector(".seconds");
+let mainBox = document.querySelector(".main_box");
 
-var slideshowContainer;
+setInterval(function () {
+  let UpcomingDate = new Date("22 october 2022 07:00:00 AM");
+  let NowDate = new Date();
+  let differanceTime = Math.floor((UpcomingDate - NowDate) / 1000);
 
-window.addEventListener("load", function () {
-  showSlides(slideIndex);
-  myTimer = setInterval(function () {
-    plusSlides(1);
-  }, 4000);
+  let differanceDay = Math.floor(differanceTime / 60 / 60 / 24);
+  let differanceHour = Math.floor((differanceTime / 60 / 60) % 24);
+  let differanceMinute = Math.floor((differanceTime / 60) % 60);
+  let differanceSecound = Math.floor(differanceTime % 60);
 
-  slideshowContainer = document.getElementsByClassName("slideshow-inner")[0];
-
-  slideshowContainer.addEventListener("mouseenter", pause);
-  slideshowContainer.addEventListener("mouseleave", resume);
-});
-
-function plusSlides(n) {
-  clearInterval(myTimer);
-  if (n < 0) {
-    showSlides((slideIndex -= 1));
-  } else {
-    showSlides((slideIndex += 1));
+  if (differanceDay >= 0) {
+    day.innerHTML = differanceDay;
+    hour.innerHTML = differanceHour;
+    minute.innerHTML = differanceMinute;
+    second.innerHTML = differanceSecound;
   }
-
-  if (n === -1) {
-    myTimer = setInterval(function () {
-      plusSlides(n + 2);
-    }, 4000);
-  } else {
-    myTimer = setInterval(function () {
-      plusSlides(n + 1);
-    }, 4000);
-  }
-}
-function currentSlide(n) {
-  clearInterval(myTimer);
-  myTimer = setInterval(function () {
-    plusSlides(n + 1);
-  }, 4000);
-  showSlides((slideIndex = n));
-}
-
-function showSlides(n) {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {
-    slideIndex = 1;
-  }
-  if (n < 1) {
-    slideIndex = slides.length;
-  }
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
-  }
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex - 1].style.display = "block";
-  dots[slideIndex - 1].className += " active";
-}
-
-pause = () => {
-  clearInterval(myTimer);
-};
-
-resume = () => {
-  clearInterval(myTimer);
-  myTimer = setInterval(function () {
-    plusSlides(slideIndex);
-  }, 4000);
-};
+}, 1000);
